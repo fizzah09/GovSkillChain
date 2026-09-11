@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none">
+  <g transform="translate(10, 8)">
+    <!-- Official Shield Emblem -->
+    <path d="M22 2L40 9V22C40 33.5 32.5 41.5 22 46C11.5 41.5 4 33.5 4 22V9L22 2Z" fill="#1E3A8A" stroke="#2563EB" stroke-width="2"/>
+    <!-- Chain / Node Links inside shield -->
+    <circle cx="22" cy="18" r="4" fill="#38BDF8"/>
+    <circle cx="15" cy="28" r="3.5" fill="#60A5FA"/>
+    <circle cx="29" cy="28" r="3.5" fill="#60A5FA"/>
+    <path d="M22 18L15 28M22 18L29 28M15 28H29" stroke="#E2E8F0" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="22" cy="35" r="2.5" fill="#F59E0B"/>
+    <path d="M15 28L22 35M29 28L22 35" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="2 1"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="62" y="27" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="800" fill="#0F172A" letter-spacing="-0.5px">GovSkill<tspan fill="#2563EB">Chain</tspan></text>
+  <text x="63" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="9.5" font-weight="600" fill="#64748B" letter-spacing="1.5px">NATIONAL DIGITAL CERTIFICATION</text>
+</svg>

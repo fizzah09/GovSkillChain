@@ -1,0 +1,8 @@
+{
+  "contractAddress": "0x18592C9290a58a2EF192f0F4ed06571f13251f0e",
+  "nftAddress": "0x166903E6b754bf0f4b2D7481e55E6ef61673fBCc",
+  "attestorAddress": "0x46C19Dff4cD4B7f943737F949d477a073AC7954F",
+  "chainId": 11155111,
+  "network": "sepolia",
+  "deployedAt": "2026-09-11T11:36:48.703Z"
+}

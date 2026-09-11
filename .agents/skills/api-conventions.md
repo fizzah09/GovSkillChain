@@ -1,0 +1,11 @@
+# API Conventions & Rules
+- Base URL: http://localhost:4000
+- Authentication: Wallet signature + National ID (No password auth required)
+- Endpoints:
+  - GET /health
+  - GET /api/tests
+  - POST /api/tests/start
+  - POST /api/tests/submit
+  - POST /api/certificates/issue
+  - GET /api/certificates/:tokenId/verify
+  - POST /api/certificates/:tokenId/revoke
