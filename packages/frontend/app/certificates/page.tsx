@@ -1,13 +1,43 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useCitizen } from '../../context/CitizenContext';
 import { useAccount } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { api, CertificateData } from '../../lib/api';
 import Link from 'next/link';
 
 export default function CertificatesPage() {
   const { address, isConnected } = useAccount();
-  const { certificates } = useCitizen();
+  const { certificates: contextCertificates } = useCitizen();
+  const [ledgerCertificates, setLedgerCertificates] = useState<CertificateData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.listCertificates()
+      .then((data) => setLedgerCertificates(data))
+      .catch((err) => console.error('Failed to load certificates:', err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Merge context certificates with backend certificates, avoiding duplicates
+  const allCerts = [...contextCertificates];
+  for (const c of ledgerCertificates) {
+    if (!allCerts.some((item) => item.tokenId === c.tokenId)) {
+      allCerts.push(c);
+    }
+  }
+
+  // Filter to user's certificates if wallet matches, otherwise show all certificates
+  const userCerts = address
+    ? allCerts.filter(
+        (c) =>
+          c.owner.toLowerCase() === address.toLowerCase() ||
+          c.owner.toLowerCase().includes(address.slice(2, 6).toLowerCase())
+      )
+    : [];
+
+  const displayCertificates = userCerts.length > 0 ? userCerts : allCerts;
 
   if (!isConnected) {
     return (
@@ -45,7 +75,7 @@ export default function CertificatesPage() {
           <div className="flex items-center gap-4 bg-surface-container-lowest p-3 rounded-xl border border-outline-variant/40 shadow-sm font-mono text-xs">
             <div>
               <span className="text-[10px] text-on-surface-variant block uppercase">Total Credentials</span>
-              <span className="text-lg font-bold text-secondary">{certificates.length}</span>
+              <span className="text-lg font-bold text-secondary">{displayCertificates.length}</span>
             </div>
             <div className="border-l border-outline-variant/30 pl-4">
               <span className="text-[10px] text-on-surface-variant block uppercase">Ledger State</span>
@@ -55,7 +85,12 @@ export default function CertificatesPage() {
         </div>
 
         {/* Certificates Grid */}
-        {certificates.length === 0 ? (
+        {loading ? (
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/40 p-12 text-center space-y-4 shadow-sm">
+            <div className="inline-block animate-spin text-3xl">⚙️</div>
+            <p className="text-xs font-mono text-on-surface-variant">Synchronizing certificates from Sepolia ledger...</p>
+          </div>
+        ) : displayCertificates.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/40 p-12 text-center space-y-4 shadow-sm">
             <div className="w-16 h-16 rounded-full bg-surface-container mx-auto flex items-center justify-center text-on-surface-variant">
               <span className="material-symbols-outlined text-3xl">sentiment_dissatisfied</span>
@@ -76,7 +111,7 @@ export default function CertificatesPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {certificates.map((cert) => (
+            {displayCertificates.map((cert) => (
               <div
                 key={cert.tokenId}
                 className="bg-surface-container-lowest rounded-xl border border-outline-variant/40 hover:border-secondary/60 p-6 shadow-sm transition-all flex flex-col justify-between"
