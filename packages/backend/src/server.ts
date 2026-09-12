@@ -3,14 +3,17 @@ dotenv.config();
 
 import app from './app';
 
-const PORT = parseInt(process.env.PORT || '4000', 10);
+const PORT = parseInt(process.env.PORT || '8080', 10);
 
-const server = app.listen(PORT, () => {
+// Fly.io requires binding to 0.0.0.0, not 127.0.0.1
+const HOST = '0.0.0.0';
+
+const server = app.listen(PORT, HOST, () => {
   console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║        GovSkill Chain — Backend API                     ║
-║        http://localhost:${PORT}                              ║
-║        Health: http://localhost:${PORT}/health               ║
+║        http://${HOST}:${PORT}                            ║
+║        Health: http://${HOST}:${PORT}/health             ║
 ╚══════════════════════════════════════════════════════════╝
   `);
 });

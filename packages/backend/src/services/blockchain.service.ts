@@ -197,7 +197,22 @@ export async function verifyCertificate(tokenId: string): Promise<CertificateDat
       revokedReason: cached?.revokedReason,
       demo: false,
     };
-  } catch {
+  } catch (err) {
+    // If on-chain query fails (e.g. mock/demo token, unminted record, or RPC glitch), fallback to in-memory registry if available
+    if (cached) {
+      const domain = getDomainById(cached.domainId);
+      return {
+        tokenId,
+        owner: cached.owner,
+        domainId: cached.domainId,
+        domainTitle: domain?.title ?? cached.domainId,
+        score: cached.score,
+        issuedAt: cached.issuedAt,
+        isRevoked: cached.isRevoked,
+        revokedReason: cached.revokedReason,
+        demo: true,
+      };
+    }
     return null;
   }
 }
